@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\buffers\cmd_buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\types\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\types\animated_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\types\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\types\shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\adapters\adapter_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\buffers\vb_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\src\buffers\ib_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\ev0lve-fixed\contrib\gui\deps\renderer\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A7C4B1CD-3E30-3421-AC13-FB652F537101}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

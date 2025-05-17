@@ -1,0 +1,21 @@
+#Ignore useless stuff
+
+# Main directory
+.vs/
+CMakeFiles/
+csgo_internal.dir/
+Debug/
+Release/
+Win32/
+
+# GUI directory
+contrib/gui/CMakeFiles/
+contrib/gui/Debug/
+contrib/gui/gui.dir/
+contrib/gui/Release/
+
+# Renderer directory
+contrib/gui/deps/renderer/CMakeFiles/
+contrib/gui/deps/renderer/Debug/
+contrib/gui/deps/renderer/Release/
+contrib/gui/deps/renderer/renderer.dir/

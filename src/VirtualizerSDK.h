@@ -1,0 +1,4 @@
+#pragma once 
+
+#define VIRTUALIZER_SHARK_WHITE_START()
+#define VIRTUALIZER_SHARK_WHITE_END()

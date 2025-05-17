@@ -1,0 +1,7 @@
+.idea
+cmake-build-debug
+tester_dx9/cmake-build-debug
+tester_dx11/cmake-build-debug
+.vs/
+x64/
+out/
