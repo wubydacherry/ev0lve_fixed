@@ -58,7 +58,7 @@ void notifications_popup::render()
 	d->add_rect_filled(r, colors.bg_bottom.mod_a(.8f));
 	d->add_rect(r, colors.outline);
 
-	d->font = draw.fonts[GUI_HASH("gui_bold")]; //gui_bald
+	d->font = draw.fonts[GUI_HASH("gui_bold")];
 	d->add_text(r.tl() + vec2{10.f, 10.f}, ctx->user.username, colors.accent);
 	d->font = draw.fonts[GUI_HASH("gui_main")];
 	d->add_text(r.tl() + vec2{10.f, 30.f}, XOR("Expires: ") + ctx->user.active_until, colors.text);

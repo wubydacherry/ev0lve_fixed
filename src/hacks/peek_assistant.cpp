@@ -26,36 +26,35 @@ void peek_assistant_t::on_before_move()
 	}
 }
 
-// edit 17.5.2025: thank you mimibob!
-void peek_assistant_t::on_create_move(user_cmd* cmd)
+void peek_assistant_t::on_create_move(user_cmd *cmd)
 {
 	const auto track_glowies = [this](const vec3 visual_pos)
+	{
+		for (auto n = game->glow_manager->glow_box_definitions.count() - 1; n >= 0; n--)
+			if (game->glow_manager->glow_box_definitions[n].birth_time == box_time)
+				game->glow_manager->glow_box_definitions.fast_remove(n);
+
+		constexpr auto radius = 36;
+		const auto clr = cfg.misc.peek_assistant_color.get();
+		auto last_seg = visual_pos;
+		for (auto i = 0; i < radius + 1; i++)
 		{
-			for (auto n = game->glow_manager->glow_box_definitions.count() - 1; n >= 0; n--)
-				if (game->glow_manager->glow_box_definitions[n].birth_time == box_time)
-					game->glow_manager->glow_box_definitions.fast_remove(n);
-
-			constexpr auto radius = 36;
-			const auto clr = cfg.misc.peek_assistant_color.get();
-			auto last_seg = visual_pos;
-			for (auto i = 0; i < radius + 1; i++)
+			const auto x = visual_pos.x + .33f * radius * cosf(i * 2.f * sdk::pi / radius);
+			const auto y = visual_pos.y - .33f * radius * sinf(i * 2.f * sdk::pi / radius);
+			const auto seg = vec3{x, y, visual_pos.z};
+			vec3 delta_pos(last_seg - seg);
+			if (delta_pos.length2d() < .25f * .33f * radius)
 			{
-				const auto x = visual_pos.x + .33f * radius * cosf(i * 2.f * sdk::pi / radius);
-				const auto y = visual_pos.y - .33f * radius * sinf(i * 2.f * sdk::pi / radius);
-				const auto seg = vec3{ x, y, visual_pos.z };
-				vec3 delta_pos(last_seg - seg);
-				if (delta_pos.length2d() < .25f * .33f * radius)
-				{
-					const auto deg = RAD2DEG(atan2f(delta_pos.y, delta_pos.x));
-					angle trajectory{ 0.f, deg - floorf(deg / 360.0f + .5f) * 360.0f, 0.f };
-					game->glow_manager->add_glow_box(seg, trajectory, { 0.f, -.2f, -.2f }, { delta_pos.length(), .2f, .2f },
-						clr, .5f);
-				}
-				last_seg = seg;
+				const auto deg = RAD2DEG(atan2f(delta_pos.y, delta_pos.x));
+				angle trajectory{0.f, deg - floorf(deg / 360.0f + .5f) * 360.0f, 0.f};
+				game->glow_manager->add_glow_box(seg, trajectory, {0.f, -.2f, -.2f}, {delta_pos.length(), .2f, .2f},
+												 clr, .5f);
 			}
+			last_seg = seg;
+		}
 
-			box_time = game->globals->curtime - .25f;
-		};
+		box_time = game->globals->curtime - .25f;
+	};
 
 	constexpr auto move_mask = user_cmd::forward | user_cmd::back | user_cmd::move_left | user_cmd::move_right;
 	buttons_debounce &= cmd->buttons & move_mask;
@@ -66,7 +65,7 @@ void peek_assistant_t::on_create_move(user_cmd* cmd)
 		if (!pos.has_value() && game->local_player->get_flags() & cs_player_t::on_ground)
 		{
 			pos = npos;
-			track_glowies(npos + vec3{ 0.f, 0.f, 1.f });
+			track_glowies(npos + vec3{0.f, 0.f, 1.f});
 		}
 		else
 		{
@@ -84,7 +83,7 @@ void peek_assistant_t::on_create_move(user_cmd* cmd)
 		auto extended = false;
 		for (auto n = game->glow_manager->glow_box_definitions.count() - 1; n >= 0; n--)
 		{
-			auto& box = game->glow_manager->glow_box_definitions[n];
+			auto &box = game->glow_manager->glow_box_definitions[n];
 			if (box.birth_time == box_time)
 			{
 				box.termination_time += game->globals->interval_per_tick;
@@ -148,9 +147,8 @@ void peek_assistant_t::on_create_move(user_cmd* cmd)
 
 	for (auto i = 0; i < TIME_TO_TICKS(1.f); i++)
 	{
-		data.forward_move = cmd->forwardmove;
-		data.side_move = cmd->sidemove;
-
+		std::tie(data.forward_move, data.side_move) = std::tie(cmd->forwardmove, cmd->sidemove);
+		slow_movement(&data, 0.f);
 		cs_game_movement_t::walk_move(&data, game->local_player);
 		data.abs_origin += data.velocity * game->globals->interval_per_tick;
 
@@ -161,25 +159,10 @@ void peek_assistant_t::on_create_move(user_cmd* cmd)
 	if ((data.abs_origin - shot_pos).length() > (shot_pos - *pos).length() - 1.1f)
 	{
 		data = start;
-
-		vec3 ang;
-		vector_angles(data.velocity * -1.f, ang);
-		ang.y = std::remainderf(data.view_angles.y - ang.y, yaw_bounds);
-		vec3 forward;
-		angle_vectors(ang, forward);
-		forward.z = 0.f;
-		forward.normalize();
-
-		const auto target_move_len = min(data.velocity.length2d(), data.max_speed);
-
-		data.forward_move = forward.x * target_move_len;
-		data.side_move = forward.y * target_move_len;
-		data.up_move = 0.f;
-
-		cmd->forwardmove = data.forward_move;
-		cmd->sidemove = data.side_move;
-
+		slow_movement(&data, 0.f);
+		std::tie(cmd->forwardmove, cmd->sidemove) = std::tie(data.forward_move, data.side_move);
 		cs_game_movement_t::walk_move(&data, game->local_player);
+
 		if (data.velocity.length() < 1.1f)
 		{
 			if (!state)

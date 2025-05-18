@@ -1,4 +1,5 @@
 #include <gui/gui.h>
+#include <algorithm>
 
 #ifdef EV0_GUI_CSGO
 #include <menu/menu.h>
@@ -43,9 +44,8 @@ context::context(float text_size)
 	// TODO: get rid of this shit
 	std::string win_dir{win_dir_arr};
 	draw.fonts[GUI_HASH("gui_debug")] = std::make_shared<font>((win_dir + XOR("/fonts/verdana.ttf")).c_str(), 14.f, 0, 0, 0x45F);
-		draw.fonts[GUI_HASH("gui_bold")] = std::make_shared<font>((win_dir + XOR("/fonts/segoeuib.ttf")).c_str(), text_size, 0, 0, 0x45F); //segoeuib
 	draw.fonts[GUI_HASH("gui_main")] = std::make_shared<font>((win_dir + XOR("/fonts/segoeui.ttf")).c_str(), text_size, 0, 0, 0x45F);
-
+	draw.fonts[GUI_HASH("gui_bold")] = std::make_shared<font>((win_dir + XOR("/fonts/segoeuib.ttf")).c_str(), text_size, 0, 0, 0x45F);
 
 	draw.shaders[GUI_HASH("blur_f")] = std::make_shared<shader>(
 		XOR("sampler s0;const float2 resolution:register(c0);const float time:register(c1);const float "
@@ -325,9 +325,6 @@ void context::process_chords()
 
 void context_debug::render()
 {
-	if (!enabled)
-		return;
-
 	const auto &fnt = draw.fonts[GUI_HASH("gui_debug")];
 	const auto &fps_raw = draw.frame_time;
 	const auto fps = fps_raw == 0.f ? 999.f : (1.f / fps_raw);
@@ -348,7 +345,7 @@ void context_debug::render()
 
 void context_debug::render(const std::shared_ptr<control> &c)
 {
-	if (!enabled)
+	if ( !enabled )
 		return;
 
 	const auto &d = draw.layers[l_last];

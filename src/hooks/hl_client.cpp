@@ -419,10 +419,9 @@ void __cdecl create_move_proxy(hl_client_t *client, int32_t sequence_number, flo
 				std::tie(pred.original_cmd.forwardmove, pred.original_cmd.sidemove);
 
 			// full stop.
-			// edit 17.5.2025: thank you mimibob! 
-			//if (aa.is_active() && cmd->forwardmove == 0.f && cmd->sidemove == 0.f && !attempted_to_jump) {
-			//	slow_movement(cmd, 0.f);
-			//}
+			if (aa.is_active() && cmd->forwardmove == 0.f && cmd->sidemove == 0.f && !attempted_to_jump) {
+				slow_movement(cmd, 0.f);
+			}
 			if ((cfg.rage.slowwalk.get() || (aa.is_active() && aa.is_fakeducking())) && !peek_assistant.has_shot)
 				rag.autostop(cmd, true, true);
 			// prevent move layer from reaching highest weight...

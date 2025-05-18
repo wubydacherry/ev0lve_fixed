@@ -44,19 +44,11 @@ void tabs_layout::render()
 	if (direction == td_vertical)
 	{
 		d->g.anti_alias = true;
-		d->add_rect_filled_rounded(r, colors.base.gray_darker, 3.f, rnd_bl);
+		d->add_rect_filled_rounded(r, colors.base.gray, 3.f, rnd_bl);
 		d->g.anti_alias = false;
 
-		d->add_line(r.tr(), r.br(), colors.base.gray);
+		d->add_line(r.tr(), r.br(), colors.outline);
 	}
 
 	layout::render();
-
-	// :>
-	if (direction == td_vertical)
-	{
-		d->g.anti_alias = true;
-		d->add_shadow_line(r.height(7.f), shadow_down, .36f);
-		d->g.anti_alias = false;
-	}
 }

@@ -10,13 +10,16 @@ void window::render()
 	src_anim->animate();
 
 	const auto r = area_abs();
-	const auto r_tab_line = r.margin_top(3.f).height(64.f);
+	const auto r_tab_line = r.margin_top(3.f).height(50.f);
 
 	auto &d = draw.layers[ctx->content_layer];
 	d->g.anti_alias = true;
 
 	// background
 	d->add_rect_filled_rounded(r.padding_top(3.f), colors.base.gray_darkest, 3.f, rnd_b);
+
+	// header
+	d->add_rect_filled_rounded(r.padding_top(3.f).height(50.f), colors.base.gray, 3.f, rnd_t);
 
 	// top line
 	const auto r_line = r.height(3.f);
@@ -31,35 +34,37 @@ void window::render()
 		r_line_gradient_h.margin_left(r_line_half_w), {colors.accents.accent, colors.accents.accent_dark, colors.accents.accent_dark, colors.accents.accent});
 
 	// main line
-	d->add_rect_filled(r_tab_line, colors.base.gray);
-
+	d->g.texture = ctx->res.general.pattern->obj;
+	d->add_rect_filled(r_tab_line, color::white().mod_a(0.45f));
+	d->g.texture = {};
+	
 	// logo
-	const auto r_logo_center = r_tab_line.width(76.f).center();
-	const auto r_logo_size = ctx->res.general.logo_head->get_size() * .5f;
+	const auto r_logo_center = r_tab_line.width(62.f).center();
+	const auto r_logo_size = ctx->res.general.logo_head->get_size() * .35f;
 	const auto r_logo = rect(r_logo_center - r_logo_size, r_logo_center + r_logo_size);
-
+	
 	d->g.texture = ctx->res.general.logo_head->obj;
 	d->add_rect_filled(r_logo, color::white());
 	d->g.texture = ctx->res.general.logo_stripes->obj;
 	d->add_rect_filled(r_logo, colors.accents.accent);
 	d->g.texture = {};
-
+	
 	// post logo delimiter
-	d->add_line(r_tab_line.tl() + vec2{76.f, 15.f}, r_tab_line.tl() + vec2{76.f, r_tab_line.height() - 12.f}, colors.outlines.outline_light);
+	d->add_line(r_tab_line.tl() + vec2{ 62.f, 10.f}, r_tab_line.tl() + vec2{ 62.f, r_tab_line.height() - 8.f}, colors.outlines.outline_light);
 
 	// search icon
 	const auto search_pos = get_search_pos();
 	d->g.texture = ctx->res.icons.search->obj;
-	d->add_rect_filled(rect(search_pos).size({30.f, 30.f}), src_anim->value);
+	d->add_rect_filled(rect(search_pos).size({20.f, 20.f}), src_anim->value);
 	d->g.texture = {};
 
 	// profile picture
 	const auto pfp_pos = get_avatar_pos();
-	const auto pfp_area = rect(pfp_pos).size({36.f, 36.f});
+	const auto pfp_area = rect(pfp_pos).size({32.f, 32.f});
 	if (const auto tex = ctx->user.avatar; tex && tex->obj)
 	{
 		d->g.texture = tex->obj;
-		d->add_rect_filled_rounded(pfp_area, color::white(), 4.f);
+		d->add_circle_filled(pfp_area.center(), 16.f, color::white());
 		d->g.texture = {};
 	}
 	else
@@ -75,10 +80,11 @@ void window::render()
 	//d->g.alpha = old_alpha;
 
 	// pfp outline
-	d->add_rect_rounded(pfp_area, colors.outlines.outline_dark, 4.f);
+	d->add_circle(pfp_area.center(), 16.f, colors.outlines.outline_dark);
 
 	// header shadow
-	d->add_shadow_line(r_tab_line.margin_top(64.f).height(7.f), shadow_down, .1f);
+	//d->add_shadow_line(r_tab_line.margin_top(50.f).height(7.f), shadow_down, .1f);
+	d->add_line(r_tab_line.margin_top(50.f).height(1.f).tl(), r_tab_line.margin_top(50.f).height(1.f).tr(), colors.outline);
 	d->g.anti_alias = false;
 
 	control_container::render();
@@ -145,7 +151,7 @@ void window::on_mouse_move(const vec2 &p, const vec2 &d)
 	const auto is_on_search = rect(get_search_pos()).size({30.f, 30.f}).contains(input.cursor());
 	if (is_on_search != is_mouse_on_search)
 	{
-		src_anim->direct(is_on_search ? colors.texts.hover : colors.texts.disabled);
+		src_anim->direct(is_on_search ? colors.texts.hover : colors.texts.enabled);
 		is_mouse_on_search = is_on_search;
 	}
 
@@ -162,8 +168,8 @@ void window::on_mouse_move(const vec2 &p, const vec2 &d)
 	}
 }
 
-ren::vec2 window::get_avatar_pos() { return area_abs().tr() - vec2{50.f, -17.f}; }
+ren::vec2 window::get_avatar_pos() { return area_abs().tr() - vec2{45.f, -13.f}; }
 
-ren::vec2 window::get_search_pos() { return area_abs().tr() - vec2{89.f, -20.f}; }
+ren::vec2 window::get_search_pos() { return area_abs().tr() - vec2{74.f, -20.f}; }
 
 void window::add(const std::shared_ptr<control> &c) { control_container::add(c); }

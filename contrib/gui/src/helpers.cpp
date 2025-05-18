@@ -11,7 +11,7 @@ std::shared_ptr<window> helpers::make_window(
 	auto w = std::make_shared<window>(control_id{hash(id), id}, p, s);
 
 	{
-		auto l = std::make_shared<layout>(control_id{hash(id + XOR("_content")), id + XOR("_content")}, vec2(14.f, 81.f), s - vec2(28.f, 95.f));
+		auto l = std::make_shared<layout>(control_id{hash(id + XOR("_content")), id + XOR("_content")}, vec2(10.f, 64.f), s - vec2(28.f, 59.f));
 		l->make_not_clip()->margin = {};
 
 		e(l);
@@ -20,7 +20,7 @@ std::shared_ptr<window> helpers::make_window(
 	}
 	{
 		auto l =
-			std::make_shared<tabs_layout>(control_id{hash(id + XOR("_tabs")), id + XOR("_tabs")}, vec2(93.f, 21.f), vec2{s.x - 230.f, 28.f}, td_horizontal)->as<layout>();
+			std::make_shared<tabs_layout>(control_id{hash(id + XOR("_tabs")), id + XOR("_tabs")}, vec2(68.f, 13.f), vec2{s.x - 230.f, 28.f}, td_horizontal)->as<layout>();
 
 		t(l);
 
@@ -46,9 +46,9 @@ helpers::make_groupbox(const std::string &id, const std::string &t, const vec2 &
 {
 	auto l = std::make_shared<layout>(control_id{hash(id + XOR("_content")), id + XOR("_content")}, vec2(4.f, 36.f), s - vec2(8.f, 40.f), s_vertical);
 	l->margin = {};
-	l->first_offset = {0.f, 14.f};
-	l->last_offset = {0.f, 6.f};
-	l->custom_margin = {10.f, 0.f, 10.f, 4.f};
+	l->first_offset = {0.f, 4.f};
+	l->last_offset = {0.f, 0.f};
+	l->custom_margin = {10.f, 0.f, 10.f, 0.f};
 
 	e(l);
 

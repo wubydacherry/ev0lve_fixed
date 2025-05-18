@@ -9,7 +9,7 @@ USE_NAMESPACES;
 
 void menu::group::rage_tab(std::shared_ptr<layout> &e)
 {
-	const auto side_bar = MAKE("rage.sidebar", tabs_layout, vec2{-10.f, -10.f}, vec2{200.f, 440.f}, td_vertical, true);
+	const auto side_bar = MAKE("rage.sidebar", tabs_layout, vec2{-10.f, -10.f}, vec2{200.f, 437.f}, td_vertical, true);
 	side_bar->add(
 		MAKE("rage.sidebar.general", child_tab, XOR("General"), GUI_HASH("rage.weapon_tab.general"))->make_selected());
 	side_bar->add(MAKE("rage.sidebar.pistol", child_tab, XOR("Pistols"), GUI_HASH("rage.weapon_tab.pistol")));

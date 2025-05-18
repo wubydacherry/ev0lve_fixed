@@ -1,5 +1,6 @@
 #include <gui/controls/hsv_slider.h>
 #include <gui/gui.h>
+#include <algorithm>
 
 GUI_NAMESPACE;
 

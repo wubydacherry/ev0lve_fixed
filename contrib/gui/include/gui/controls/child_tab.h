@@ -16,8 +16,8 @@ public:
 		size.y = 28.f;
 		margin = {0.f, 2.f, 0.f, 2.f};
 
-		anim_bg = std::make_shared<anim_color>(colors.base.gray_darker, 0.15f);
-		shift_anim = std::make_shared<anim_float>(0.f, 0.15f);
+		an = std::make_shared<anim_color>(colors.text_dark, 0.15f);
+		of = std::make_shared<anim_float>(0.f, 0.15f, ease_out);
 
 		type = ctrl_child_tab;
 
@@ -26,6 +26,9 @@ public:
 	}
 
 	void on_first_render_call() override;
+
+	void on_mouse_enter() override;
+	void on_mouse_leave() override;
 
 	void select() override;
 	void unselect() override;
@@ -41,8 +44,8 @@ public:
 	bool is_horizontal{true};
 
 private:
-	std::shared_ptr<ren::anim_color> anim_bg;
-	std::shared_ptr<ren::anim_float> shift_anim;
+	std::shared_ptr<ren::anim_color> an;
+	std::shared_ptr<ren::anim_float> of;
 };
 } // namespace evo::gui
 

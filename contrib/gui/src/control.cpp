@@ -133,7 +133,7 @@ void control::render()
 		// show debug meme
 		if (can_show_debug_info() && ctx->get_last_hovered() == id)
 		{
-			const auto &m = draw.fonts[GUI_HASH("gui_bold")]; //gui_bald
+			const auto &m = draw.fonts[GUI_HASH("gui_bold")];
 			const auto &m_normal = draw.fonts[GUI_HASH("gui_main")];
 			const auto ts = m->get_text_size(id_string);
 			const auto r = rect(input.cursor() + 16.f).size(vec2{max(ts.x, 108.f) + 36.f, 40.f});
@@ -166,8 +166,8 @@ void control::render()
 			d->add_rect_filled(r, colors.bg_bottom);
 			d->add_rect(r, colors.outline);
 			d->font = m;
-			d->add_text(vec2(r.tl().x + 8.f, r.center().y), tooltip, colors.text, text_params::with_v(ren::align_center));
-						
+			d->add_text(vec2(r.tl().x + 8.f, r.center().y), tooltip, colors.text,
+						text_params::with_v(ren::align_center));
 		}
 	}
 

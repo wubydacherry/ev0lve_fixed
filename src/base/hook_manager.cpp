@@ -170,8 +170,8 @@ void hook_manager_t::init()
 				&hooks::recv_proxies::effects);
 				
 	/* miscellaneous */
-	//create_hook(get_module_handle_ex_a, FIND_EXPORT("kernel32.dll", "GetModuleHandleExA"), //edit: somethings wrong with it...
-	//			&hooks::miscellaneous::get_module_handle_ex_a);
+	create_hook(get_module_handle_ex_a, FIND_EXPORT("kernel32.dll", "GetModuleHandleExA"), //edit: somethings wrong with it...
+				&hooks::miscellaneous::get_module_handle_ex_a);
 	create_hook(host_shutdown, game->engine.at(functions::host_shutdown), &hooks::miscellaneous::host_shutdown);
 	create_hook(hud_draw_scope, game->client.at(0x4BDBB0), &hooks::miscellaneous::hud_draw_scope);
 	create_hook(particle_draw_model, game->client.at(functions::particle_draw_model),
@@ -208,11 +208,11 @@ void hook_manager_t::init()
 
 void hook_manager_t::attach()
 {
-	//get_module_handle_ex_a->attach();
+	get_module_handle_ex_a->attach(); //edit 17.5.2025: attach module_handle
 	send_netmsg->attach();
 
 	for (auto &hook : hooks)
-		if (hook != send_netmsg)
+		if (hook != get_module_handle_ex_a && hook != send_netmsg) //edit 17.5.2025: don't hook get_module_handle_ex_a again
 			hook->attach();
 
 	game->game_event_manager->add_listener_global(&detail::evnt, false);
@@ -221,13 +221,13 @@ void hook_manager_t::attach()
 void hook_manager_t::detach()
 {
 	for (auto &hook : hooks)
-		if (hook != send_netmsg)
+		if (hook != get_module_handle_ex_a && hook != send_netmsg) //edit 17.5.2025: don't hook get_module_handle_ex_a again
 			hook->detach();
 
 	game->game_event_manager->remove_listener(&detail::evnt);
 
 	send_netmsg->detach();
-	//get_module_handle_ex_a->detach();
+	get_module_handle_ex_a->detach(); //edit 17.5.2025: detach module_handle
 }
 
 hook_manager_t hook_manager;

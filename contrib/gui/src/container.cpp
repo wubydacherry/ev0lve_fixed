@@ -1,5 +1,5 @@
 #include <gui/gui.h>
-
+#include <algorithm>
 GUI_NAMESPACE;
 
 std::shared_ptr<control> container::find(uint64_t id)

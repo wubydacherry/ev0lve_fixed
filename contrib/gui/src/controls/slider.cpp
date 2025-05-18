@@ -1,4 +1,5 @@
 #include <gui/controls/slider.h>
+#include <algorithm>
 
 GUI_NAMESPACE;
 

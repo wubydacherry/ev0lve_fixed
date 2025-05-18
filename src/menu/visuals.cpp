@@ -27,14 +27,14 @@ USE_NAMESPACES;
 
 namespace menu::group
 {
-const vec2 group_sz{284.f, 430.f};
-const vec2 group_half_sz = group_sz * vec2{1.f, 0.5f} - vec2{0.f, 5.f};
-const vec2 group_third_sz = group_sz * vec2{1.f, 1.f / 3.f} - vec2{0.f, 7.4f};
+const vec2 group_sz{ 284.f, 430.f };
+const vec2 group_half_sz = group_sz * vec2{ 1.f, 0.5f } - vec2{ 0.f, 5.f };
+const vec2 group_third_sz = group_sz * vec2{ 1.f, 0.33f } - vec2{ 0.f, 6.5f };
 
 void visuals_tab(std::shared_ptr<layout> &e)
 {
 	const auto side_bar =
-		MAKE("visuals.sidebar", tabs_layout, vec2{-10.f, -10.f}, vec2{200.f, 440.f}, td_vertical, true);
+		MAKE("visuals.sidebar", tabs_layout, vec2{-10.f, -10.f}, vec2{200.f, 437.f}, td_vertical, true);
 	side_bar->add(
 		MAKE("visuals.sidebar.enemy", child_tab, XOR("Enemies"), GUI_HASH("visuals.tab.enemy"))->make_selected());
 	side_bar->add(MAKE("visuals.sidebar.team", child_tab, XOR("Teammates"), GUI_HASH("visuals.tab.team")));

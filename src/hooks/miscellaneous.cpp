@@ -32,7 +32,7 @@ int32_t __stdcall get_module_handle_ex_a(uint32_t flags, const char *str, uint32
 	auto &ret_addr = _ebp[1];
 
 	//if (*ret_addr == functions::return_to_is_module_whitelisted)
-	if (*ret_addr == 0x2374c085) // find new one.
+	if (*ret_addr == 0x2374c085)
 	{
 		ret_addr = (uintptr_t *)(uintptr_t(ret_addr) + 0x47);
 		return 1;

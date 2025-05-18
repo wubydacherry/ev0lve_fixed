@@ -2,116 +2,137 @@
 #define GUI_TESTER_MISC_H
 
 #include <string>
+#include <cstdint> // Include for uint64_t
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-#define GUI_HASH(s) evo::gui::msvc_constexpr<unsigned long long, evo::gui::hash(s)>::_
-#define GUI_HASH_32(s) evo::gui::msvc_constexpr<unsigned int, evo::gui::hash_32(s)>::_
+#define GUI_HASH(s) evo::gui::msvc_constexpr<uint64_t, evo::gui::hash(s)>::_
+#define GUI_HASH_32(s) evo::gui::msvc_constexpr<uint32_t, evo::gui::hash_32(s)>::_
 
-namespace evo::gui
-{
-template <typename T, T V> struct msvc_constexpr
-{
-	enum
-	{
-		_ = V
-	};
-};
+namespace evo::gui {
+    template <typename T, T V> struct msvc_constexpr {
+        static constexpr T _ = V;
+    };
 
-inline constexpr unsigned int hash_32(const char *str)
-{
-	constexpr auto prime = 0x01000193;
-	constexpr auto basis = 0x811c9dc5;
+    inline constexpr uint32_t hash_32(const char* str) {
+        constexpr auto prime = 0x01000193;
+        constexpr auto basis = 0x811c9dc5;
 
-	unsigned int h{basis};
-	for (auto c = str; *c; ++c)
-		h = (h ^ *c) * prime;
+        uint32_t h{ basis };
+        for (auto c = str; *c; ++c)
+            h = (h ^ *c) * prime;
 
-	return h;
-}
+        return h;
+    }
 
-inline unsigned int hash_32(const std::string &str) { return hash_32(str.c_str()); }
+    inline uint32_t hash_32(const std::string& str) { return hash_32(str.c_str()); }
 
-inline constexpr unsigned long long hash(const char *str)
-{
-	constexpr auto prime = 0x100000001b3;
-	constexpr auto basis = 0xcbf29ce484222325;
+    inline constexpr uint64_t hash(const char* str) {
+        constexpr auto prime = 0x100000001b3;
+        constexpr auto basis = 0xcbf29ce484222325;
 
-	unsigned long long h{basis};
-	for (auto c = str; *c; ++c)
-		h = (h ^ *c) * prime;
+        uint64_t h{ basis };
+        for (auto c = str; *c; ++c)
+            h = (h ^ *c) * prime;
 
-	return h;
-}
+        return h;
+    }
 
-inline unsigned long long hash(const std::string &str) { return hash(str.c_str()); }
+    inline uint64_t hash(const std::string& str) { return hash(str.c_str()); }
 
-namespace native
-{
-class global
-{
-public:
-	global(HANDLE h) { object = h; }
+    inline std::string color_to_string(const ren::color& c) {
+        static const auto make_color_part = [](uint8_t col) -> std::string {
+            char temp_col[3]{};
 
-	global(int flags, size_t size) : size(size) { object = GlobalAlloc(flags, size); }
+            sprintf_s(temp_col, "%02x", col);
+            return temp_col;
+            };
 
-	HGLOBAL get() { return object; }
+        std::string str{};
+        str += "#";
+        str += make_color_part(c.get_r() & 0xFF);
+        str += make_color_part(c.get_g() & 0xFF);
+        str += make_color_part(c.get_b() & 0xFF);
+        str += make_color_part(c.get_a() & 0xFF);
 
-	void write(const void *mem, size_t sz)
-	{
-		memcpy_s(lock(), size, mem, sz);
-		unlock();
-	}
+        return str;
+    }
 
-	void *lock() { return GlobalLock(object); }
+    inline std::optional<ren::color> color_from_string(const std::string& str) {
+        uint32_t r{}, g{}, b{}, a{};
+        const auto ret = sscanf_s(str.c_str(), "#%02x%02x%02x%02x", &r, &g, &b, &a);
+        if (ret < 3)
+            return {};
 
-	void unlock() { GlobalUnlock(object); }
+        ren::color c;
+        c.value.r = (float)r / 255.f;
+        c.value.g = (float)g / 255.f;
+        c.value.b = (float)b / 255.f;
+        c.value.a = ret == 4 ? ((float)a / 255.f) : 1.f;
 
-private:
-	HGLOBAL object{};
-	size_t size{};
-};
-} // namespace native
+        return c;
+    }
 
-namespace clipboard
-{
-inline void set(const std::string &text)
-{
-	using namespace ren;
-	if (!OpenClipboard(nullptr))
-		return;
+    namespace native {
+        class global {
+        public:
+            global(HANDLE h) { object = h; }
 
-	EmptyClipboard();
+            global(int flags, size_t size) : size(size) { object = GlobalAlloc(flags, size); }
 
-	native::global mem(GMEM_MOVEABLE, text.size() + 1);
-	mem.write(reinterpret_cast<const void *>(text.data()), text.size());
+            HGLOBAL get() { return object; }
 
-	SetClipboardData(CF_TEXT, mem.get());
-	CloseClipboard();
-}
+            void write(const void* mem, size_t sz) {
+                memcpy_s(lock(), size, mem, sz);
+                unlock();
+            }
 
-inline std::string get()
-{
-	using namespace ren;
-	if (!OpenClipboard(nullptr))
-		return "";
+            void* lock() { return GlobalLock(object); }
 
-	std::string ret{};
-	native::global mem(GetClipboardData(CF_TEXT));
+            void unlock() { GlobalUnlock(object); }
 
-	if (!mem.get())
-		return "";
+        private:
+            HGLOBAL object{};
+            size_t size{};
+        };
+    } // namespace native
 
-	const auto data = reinterpret_cast<char *>(mem.lock());
-	ret = data;
+    namespace clipboard {
+        inline void set(const std::string& text) {
+            using namespace ren;
+            if (!OpenClipboard(nullptr))
+                return;
 
-	mem.unlock();
+            EmptyClipboard();
 
-	CloseClipboard();
-	return ret;
-}
-} // namespace clipboard
+            native::global mem(GMEM_MOVEABLE, text.size() + 1);
+            mem.write(reinterpret_cast<const void*>(text.data()), text.size());
+
+            SetClipboardData(CF_TEXT, mem.get());
+            CloseClipboard();
+        }
+
+        inline std::string get() {
+            using namespace ren;
+            if (!OpenClipboard(nullptr))
+                return "";
+
+            std::string ret{};
+            native::global mem(GetClipboardData(CF_TEXT));
+
+            if (!mem.get())
+                return "";
+
+            const auto data = reinterpret_cast<char*>(mem.lock());
+            ret = data;
+
+            mem.unlock();
+
+            CloseClipboard();
+            return ret;
+        }
+    } // namespace clipboard
 } // namespace evo::gui
 
 #endif // GUI_TESTER_MISC_H

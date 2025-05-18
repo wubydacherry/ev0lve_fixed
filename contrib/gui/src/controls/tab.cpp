@@ -19,16 +19,16 @@ void tab::render()
 
 	d->font = draw.fonts[GUI_HASH("gui_bold")];
 
-	d->add_rect_filled_rounded(r, colors.outlines.outline_light.mod_a(bg_anim->value), 3.f);
+	//d->add_rect_filled_rounded(r, colors.outlines.outline_light.mod_a(bg_anim->value), 3.f);
 
 	if (icon && icon->obj)
 	{
 		d->g.texture = icon->obj;
-		d->add_rect_filled(r.translate({8.f, 8.f}).size({12.f, 12.f}), icon_anim->value);
+		d->add_rect_filled(r.translate({8.f, 8.f}).size({16.f, 16.f}), icon_anim->value);
 		d->g.texture = {};
 	}
 	
-	d->add_text(r.tl() + vec2(icon ? 26.f : 8.f, size.y * .5f + 1.f), text, anim->value, text_params::with_v(align_center));
+	d->add_text(r.tl() + vec2(icon ? 26.f : 8.f, size.y * .5f + 2.5f), text, icon_anim->value, text_params::with_v(align_center));
 }
 
 void tab::on_mouse_down(char key)
@@ -104,5 +104,5 @@ void tab::on_first_render_call()
 			size.x += draw.fonts[GUI_HASH("gui_main")]->get_text_size(text).x;
 	//size.x += ctx->res.fonts.main->get_text_size(text).x; //ctx->res.fonts.bold->get_text_size(text).x;
 	if (icon)
-		size.x += 18.f;
+		size.x += 12.f;
 }

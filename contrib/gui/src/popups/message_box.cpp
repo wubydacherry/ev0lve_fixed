@@ -17,7 +17,7 @@ void message_box::render()
 	d->add_rect_filled_rounded(area, colors.bg_bottom, 4.f);
 
 	d->add_rect_filled_rounded(header, colors.bg_block, 4.f, rnd_t);
-	d->font = draw.fonts[GUI_HASH("gui_bold")]; //gui_bald
+	d->font = draw.fonts[GUI_HASH("gui_bold")];
 	d->add_text(header.center(), title, colors.text, text_params::with_vh(align_center, align_center));
 	d->add_line(header.bl(), header.br(), colors.accent);
 

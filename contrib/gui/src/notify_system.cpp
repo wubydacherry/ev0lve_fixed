@@ -89,11 +89,11 @@ void notification_system::render()
 	auto &d = draw.layers[l_last];
 	const vec2 cur{draw.display.x - popup_rect.width(), 40.f};
 
-	const auto f_bold = draw.fonts[GUI_HASH("gui_bold")]; //gui_bald
+	const auto f_bold = draw.fonts[GUI_HASH("gui_bold")];
 	const auto f_main = draw.fonts[GUI_HASH("gui_main")];
 
 	for_each(
-		[cur, f_bold, f_main](const std::shared_ptr<notification> &n)
+		[&, cur, f_bold, f_main](const std::shared_ptr<notification> &n)
 		{
 			n->pos.animate();
 			n->alpha.animate();
@@ -116,7 +116,7 @@ void notification_system::render()
 			d->add_rect_filled(r, colors.bg_bottom.mod_a(.8f));
 			d->add_rect_filled(r.width(2.f), colors.accent);
 
-			d->font = f_main;// f_bold;
+			d->font = f_bold;
 			d->add_text((r.tl() + vec2{8.f, 4.f}).floor(), n->header, colors.text_light);
 			d->font = f_main;
 			d->add_text((r.tl() + vec2{8.f, 24.f}).floor(), n->text, colors.text);

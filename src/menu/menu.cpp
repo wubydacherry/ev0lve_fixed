@@ -186,7 +186,7 @@ void menu_manager::create()
 	}*/
 #endif
 
-	const auto window_sz = vec2{ 800.f, 525.f };
+	const auto window_sz = vec2{ 800.f, 500.f };
 
 	const auto group_sz = window_size_to_groupbox_size(window_sz.x, window_sz.y);
 	const auto group_half_sz = group_sz * vec2{1.f, .5f} - vec2{0.f, 5.f};
@@ -232,8 +232,8 @@ void menu_manager::create()
 														  group::skinchanger_select));
 									 e->add(make_groupbox(XOR("skins.settings"), XOR("Settings"), group_sz,
 														  group::skinchanger_settings));
-									 // TODO: e->add(make_groupbox(XOR("skins.preview"), XOR("Preview"), group_sz,
-									 // group::skinchanger_preview));
+									 e->add(make_groupbox(XOR("skins.preview"), XOR("Preview"), group_sz,
+									 group::skinchanger_preview));
 								 }));
 
 #ifdef CSGO_LUA

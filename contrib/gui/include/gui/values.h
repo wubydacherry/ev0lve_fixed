@@ -1,12 +1,14 @@
 #ifndef VALUES_E2A14AB316F946FC9D04D93BE95D0975_H
 #define VALUES_E2A14AB316F946FC9D04D93BE95D0975_H
 
+#include <ren/types/color.h>
+
 #include <cstdint>
 #include <istream>
 #include <optional>
 #include <ostream>
 #include <stdexcept>
-#include <ren/types/color.h>
+#include <unordered_map>
 
 namespace evo::gui
 {
