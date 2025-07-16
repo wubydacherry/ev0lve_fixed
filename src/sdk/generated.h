@@ -259,9 +259,9 @@ namespace functions
 
 	namespace gameoverlayrenderer
 	{
-		constexpr uint32_t present = 0x6ad50;
-		constexpr uint32_t reset = 0x6b0d0;
-		constexpr uint32_t length_disasm = 0x77890;
+		constexpr uint32_t present = 0x6add0;
+		constexpr uint32_t reset = 0x6b150;
+		constexpr uint32_t length_disasm = 0x779b0;
 	}
 
 	namespace mat_system_surface
